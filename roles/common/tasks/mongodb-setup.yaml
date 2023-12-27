@@ -22,12 +22,12 @@
   #   ansible.builtin.debug:
   #     msg: "product count: {{entries_count}}"
 
-  - name: "load {{component}} data"
+  - name: "load catalogue data"
     ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
     when: products_count.stdout == "0" and component == "catalogue"
     ignore_errors: true
 
-  - name: "load {{component}} data"
+  - name: "load user data"
     ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
     when: users_count.stdout == "0" and component == "user"
     ignore_errors: true
