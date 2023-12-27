@@ -8,19 +8,19 @@
       name: mongodb-org-shell
       state: present 
 
-  - name: "get the {{component}} count"
+  - name: "get the catalogue count"
     ansible.builtin.shell: mongo --host mongodb.kiranku.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
     register: entries_count
     when: component == "catalogue"
 
-  - name: "get the {{component}} count"
+  - name: "get the user count"
     ansible.builtin.shell: mongo --host mongodb.kiranku.online --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
     register: entries_count
     when: component == "user"
 
   - name: print the count
     ansible.builtin.debug:
-      msg: "product count: {{product_count}}"
+      msg: "product count: {{component}}"
 
   - name: "load {{component}} data"
     ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
