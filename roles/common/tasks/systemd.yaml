@@ -1,14 +1,14 @@
-  - name: Setup SystemD Catalogue Service
+  - name: "Setup SystemD {{component}} Service"
     ansible.builtin.copy:
       src: catalogue.service
-      dest: /etc/systemd/system/catalogue.service
+      dest: "/etc/systemd/system/{{component}}.service"
 
   - name: Load the service
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: Start and enable the service
+  - name: "Start and enable the {{component}} service"
     ansible.builtin.service:
-      name: catalogue
+      name: "{{component}}"
       state: started
       enabled: yes
