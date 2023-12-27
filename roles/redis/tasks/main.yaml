@@ -1,0 +1,25 @@
+  - name: install remis rpm
+    ansible.builtin.dnf:
+      name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+      state: present
+      disable_gpg_check: true
+
+  - name: Enable Redis 6.2 from package streams
+    ansible.builtin.command: dnf module enable redis:remi-6.2 -y
+
+  - name: Install Redis
+    ansible.builtin.dnf:
+      name: redis 
+      state: present
+
+  - name: service to be accessed by another server(remote server)
+    ansible.builtin.replace:
+      path: /etc/redis/redis.conf
+      regexp: 127.0.0.1
+      replace: 0.0.0.0
+
+  - name: Start & Enable Redis Service
+    ansible.builtin.service:
+      name: redis
+      state: started
+      enabled: yes
