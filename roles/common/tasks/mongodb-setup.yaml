@@ -29,3 +29,4 @@
   - name: "load {{component}} data"
     ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
     when: users_count.stdout == "0" and component == "user"
+    ignore_errors: trues
