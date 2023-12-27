@@ -24,4 +24,4 @@
 
   - name: "load {{component}} data"
     ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
-    when: entries_count.stdout == "0"
+    when: {{entries_count.stdout}} == "0"
