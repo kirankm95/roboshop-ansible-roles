@@ -10,12 +10,12 @@
 
   - name: "get the catalogue count"
     ansible.builtin.shell: mongo --host mongodb.kiranku.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
-    register: entries_count
+    register: products_count
     when: component == "catalogue"
 
   - name: "get the user count"
     ansible.builtin.shell: mongo --host mongodb.kiranku.online --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
-    register: entries_count
+    register: users_count
     when: component == "user"
 
   - name: print the count
@@ -24,4 +24,8 @@
 
   - name: "load {{component}} data"
     ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
-    when: entries_count.stdout == "0"
+    when: products_count.stdout == "0" and component == "catalogue"
+
+  - name: "load {{component}} data"
+    ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
+    when: users_count.stdout == "0" and component == "user"
