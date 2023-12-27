@@ -1,0 +1,27 @@
+  - name: setup the mongodb repo file
+    ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: install mongodb-client
+    ansible.builtin.package:
+      name: mongodb-org-shell
+      state: present 
+
+  - name: get the entries count
+    ansible.builtin.command: mongo --host mongodb.kiranku.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+    register: entries_count
+    when: component == "catalogue"
+
+  - name: get the entries count
+    ansible.builtin.command: mongo --host mongodb.kiranku.online --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
+    register: entries_count
+    when: component == "user"
+
+  - name: print the count
+    ansible.builtin.debug:
+      msg: "product count: {{product_count}}"
+
+  - name: "load {{component}} data"
+    ansible.builtin.shell: "mongo --host mongodb.kiranku.online </app/schema/{{component}}.js"
+    when: entries_count.stdout == "0"
